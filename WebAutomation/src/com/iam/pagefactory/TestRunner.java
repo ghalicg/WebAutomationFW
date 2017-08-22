@@ -3,33 +3,40 @@ package com.iam.pagefactory;
 import static org.testng.Assert.assertTrue;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.iam.helper.BrowserFactory;
+
 public class TestRunner {
 	
-	private WebDriver driver;
-
+	WebDriver driver;
+	
+	String browser, url;
 	  
 	  @BeforeClass
-	  public void beforeClass() {
-	 driver=new FirefoxDriver();
-	 driver.navigate().to("http://demo.mahara.org");
-	 driver.manage().window().maximize();
+	  public void beforeClass()
+	 {
+		
+		  driver = BrowserFactory.startBrowser("Chrome", "http://demo.mahara.org");
+		  if (driver == null)
+		  {
+			 System.out.println("Failed to start browser"); 
+			 return;
+		  }
 	 }
 
-	  @Test
+	  @Test(priority=0)
 	  public void LoginTest() {
 		  //Initialize Login Page
 	  loginPage loginPage=PageFactory.initElements(driver, loginPage.class);
 	  //Enter user name
-	  loginPage.Login("student1", "Testing1");
+	  loginPage.Login("cgtest", "ghali123");
 	  	  }
 	  
-	  @Test
+	  @Test(priority=1)
 	  public void DashboardTest() throws InterruptedException
 	  {
 	Thread.sleep(5000);
@@ -41,7 +48,7 @@ public class TestRunner {
 	dashboardPage.ClickSettings();
 	  }
 	  
-	  @Test
+	  @Test(priority=2)
 	  public void UserSettingsTest() throws InterruptedException
 	  {
 		  Thread.sleep(5000);
